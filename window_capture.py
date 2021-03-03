@@ -19,3 +19,4 @@ class CaptureWindow:
             monitor = {'top': self.top, 'left': self.left, 'width': self.width, 'height': self.height}
             img = np.array(sct.grab(monitor))
             return img
+

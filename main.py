@@ -1,28 +1,32 @@
 # script for lane tracking in GTA SA
 
 import cv2 as cv
-import numpy as np
-import os
-from time import time
+import utilis
+from time import time, sleep
 from window_capture import CaptureWindow
 
+GAME_NAME = 'GTA: San Andreas'
+game_screen = CaptureWindow(GAME_NAME)
 
-def process_img(src_img):
-    gray = cv.cvtColor(src_img, cv.COLOR_BGR2GRAY)
-    canny = cv.Canny(gray, 120, 200)
-    return canny
+# count to 4 before launch algorithm
+for i in list(range(4)):
+    print(i+1)
+    sleep(1)
 
 
-game_screen = CaptureWindow('GTA: San Andreas')
-while True:
-    loop_time = time()
-    img = game_screen.capture()
-    res = process_img(img)
-    print('FPS:{}'.format(1 / (time()-loop_time)))
+def main():
+    while True:
+        # loop_time = time()
+        img = game_screen.capture()
+        output_img, lines = utilis.process_img(img)
+        utilis.steering_vehicle(output_img, lines)
+        # print('FPS:{}'.format(1 / (time() - loop_time)))
 
-    cv.imshow('Result', res)
-    if cv.waitKey(1) == 27:
-        break
+        cv.imshow('Output', output_img)
+        if cv.waitKey(1) == 27:
+            break
 
-cv.destroyAllWindows()
+    cv.destroyAllWindows()
 
+
+main()
